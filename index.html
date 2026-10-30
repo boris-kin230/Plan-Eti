@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Planning de nettoyage des postes</title>
+<title>Planning de nettoyage des postes - Heineken</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -19,7 +19,9 @@
     --ink: #18382A;
 }
 
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
@@ -33,7 +35,8 @@ body {
     gap: 18px;
 }
 
-/* Commande d'export, hors de l'affiche */
+/* BOUTON EXPORT */
+
 .toolbar {
     display: flex;
     justify-content: center;
@@ -57,6 +60,11 @@ button:hover {
     background: #e9f4ec;
 }
 
+button:disabled {
+    opacity: .6;
+    cursor: wait;
+}
+
 /* AFFICHETTE 15 x 15 CM */
 
 #poster {
@@ -75,7 +83,7 @@ button:hover {
     isolation: isolate;
 }
 
-/* Texture discrète */
+/* TEXTURE */
 
 #poster::before {
     content: "";
@@ -97,7 +105,7 @@ button:hover {
     z-index: 5;
 }
 
-/* Motif botanique */
+/* DÉCORATIONS ORGE */
 
 .botanical {
     position: absolute;
@@ -120,7 +128,7 @@ button:hover {
     transform: rotate(150deg);
 }
 
-/* En-tête */
+/* EN-TÊTE */
 
 .header {
     height: 22mm;
@@ -199,7 +207,7 @@ button:hover {
     letter-spacing: .5px;
 }
 
-/* Introduction du tableau */
+/* LÉGENDE */
 
 .legend {
     height: 10mm;
@@ -222,7 +230,7 @@ button:hover {
     font-weight: 600;
 }
 
-/* Tableau */
+/* TABLEAU */
 
 .schedule {
     flex: 1;
@@ -250,7 +258,7 @@ button:hover {
     text-align: center;
 }
 
-/* En-tête colonnes */
+/* EN-TÊTES DES COLONNES */
 
 .column-head {
     background: #003F23;
@@ -271,7 +279,7 @@ button:hover {
     font-weight: 600;
 }
 
-/* Jours */
+/* JOURS */
 
 .day {
     background: #F0F5EF;
@@ -293,7 +301,7 @@ button:hover {
     color: #718277;
 }
 
-/* Cases de postes */
+/* CELLULES POSTES */
 
 .post {
     background: #FAFCF9;
@@ -330,39 +338,25 @@ button:hover {
     text-transform: uppercase;
 }
 
-/* Accent des différents postes */
+/* ACCENTS PAR ÉQUIPE */
 
-.post.multi strong {
-    font-size: 16pt;
-}
-
-.post.responsibility {
-    background: #FFF5DB;
-    border: .45mm solid var(--gold);
-}
-
-.post.responsibility strong {
-    font-size: 17pt;
-    color: #684B0A;
-}
-
-.post.responsibility small {
-    color: #826B38;
-}
-
-.post.night {
-    border-bottom: 1mm solid #305C45;
+.post.morning {
+    border-bottom: 1mm solid #6BA9D1;
 }
 
 .post.afternoon {
     border-bottom: 1mm solid #D1A84D;
 }
 
-.post.morning {
-    border-bottom: 1mm solid #6BA9D1;
+.post.night {
+    border-bottom: 1mm solid #305C45;
 }
 
-/* Dimanche */
+.post.multi strong {
+    font-size: 16pt;
+}
+
+/* DIMANCHE */
 
 .row.sunday .day {
     background: #E5EEE5;
@@ -372,7 +366,49 @@ button:hover {
     background: #FFF8E8;
 }
 
-/* Pied de page */
+/* DIMANCHE NUIT : RESPONSABILITÉS INDIVIDUELLES */
+
+.post.responsibility-list {
+    background: #FFF5DB !important;
+    border: .45mm solid var(--gold);
+    padding: 1mm;
+    gap: 1.5mm;
+}
+
+.responsibility-item {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5mm;
+}
+
+.responsibility-item strong {
+    font-size: 16pt;
+    line-height: 1;
+    color: #684B0A;
+    font-weight: 950;
+}
+
+.responsibility-item small {
+    font-size: 5.8pt;
+    color: #826B38;
+    font-weight: 850;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.15;
+}
+
+.responsibility-divider {
+    width: 78%;
+    height: .3mm;
+    flex-shrink: 0;
+    background: #D5B45B;
+}
+
+/* PIED DE PAGE */
 
 .footer {
     height: 7mm;
@@ -391,23 +427,7 @@ button:hover {
     color: var(--gold);
 }
 
-/* Adaptation écran */
-
-@media(max-width: 600px) {
-    #poster {
-        width: 95vw;
-        height: 95vw;
-        padding: 3.2vw;
-    }
-
-    .heading h1 { font-size: 3.2vw; }
-    .brand-name { font-size: 2.4vw; }
-    .post strong { font-size: 4.5vw; }
-    .post.multi strong { font-size: 3.8vw; }
-    .day strong { font-size: 2.2vw; }
-}
-
-/* Impression */
+/* IMPRESSION */
 
 @media print {
     @page {
@@ -421,7 +441,9 @@ button:hover {
         background: white;
     }
 
-    .toolbar { display: none; }
+    .toolbar {
+        display: none !important;
+    }
 
     #poster {
         box-shadow: none;
@@ -429,42 +451,92 @@ button:hover {
         -webkit-print-color-adjust: exact;
     }
 }
+
+/* ADAPTATION ÉCRAN */
+
+@media(max-width: 600px) {
+    #poster {
+        width: 95vw;
+        height: 95vw;
+        padding: 3.2vw;
+    }
+
+    .heading h1 {
+        font-size: 3.2vw;
+    }
+
+    .brand-name {
+        font-size: 2.4vw;
+    }
+
+    .post strong {
+        font-size: 4.5vw;
+    }
+
+    .post.multi strong {
+        font-size: 3.8vw;
+    }
+
+    .day strong {
+        font-size: 2.2vw;
+    }
+}
 </style>
 </head>
 
 <body>
 
+<!-- BOUTON EXPORT -->
+
 <div class="toolbar">
-    <button onclick="downloadPNG()">↓ Télécharger le planning PNG</button>
+    <button onclick="downloadPNG()">
+        ↓ Télécharger le planning PNG
+    </button>
 </div>
+
+<!-- AFFICHE -->
 
 <div id="poster">
 
     <div class="frame"></div>
 
-    <!-- Illustration botanique en filigrane -->
-    <svg class="botanical left" viewBox="0 0 150 240"
-         xmlns="http://www.w3.org/2000/svg" fill="none"
-         stroke="#F1D57D" stroke-width="3">
+    <!-- ORGE GAUCHE -->
+
+    <svg class="botanical left"
+         viewBox="0 0 150 240"
+         xmlns="http://www.w3.org/2000/svg"
+         fill="none"
+         stroke="#F1D57D"
+         stroke-width="3">
+
         <path d="M20 230 Q70 130 95 10"/>
         <path d="M53 145 Q15 120 15 95 Q50 100 53 145Z" fill="#F1D57D"/>
         <path d="M65 110 Q105 75 125 83 Q108 117 65 110Z" fill="#F1D57D"/>
         <path d="M77 73 Q48 42 58 20 Q83 36 77 73Z" fill="#F1D57D"/>
         <path d="M40 175 Q10 150 5 135 Q35 140 40 175Z" fill="#F1D57D"/>
         <path d="M45 175 Q80 135 105 143 Q85 175 45 175Z" fill="#F1D57D"/>
+
     </svg>
 
-    <svg class="botanical right" viewBox="0 0 150 240"
-         xmlns="http://www.w3.org/2000/svg" fill="none"
-         stroke="#F1D57D" stroke-width="3">
+    <!-- ORGE DROITE -->
+
+    <svg class="botanical right"
+         viewBox="0 0 150 240"
+         xmlns="http://www.w3.org/2000/svg"
+         fill="none"
+         stroke="#F1D57D"
+         stroke-width="3">
+
         <path d="M20 230 Q70 130 95 10"/>
         <path d="M53 145 Q15 120 15 95 Q50 100 53 145Z" fill="#F1D57D"/>
         <path d="M65 110 Q105 75 125 83 Q108 117 65 110Z" fill="#F1D57D"/>
         <path d="M77 73 Q48 42 58 20 Q83 36 77 73Z" fill="#F1D57D"/>
         <path d="M40 175 Q10 150 5 135 Q35 140 40 175Z" fill="#F1D57D"/>
+
     </svg>
 
-    <!-- En-tête -->
+    <!-- EN-TÊTE -->
+
     <header class="header">
 
         <div class="brand">
@@ -484,34 +556,44 @@ button:hover {
 
     </header>
 
+    <!-- LÉGENDE -->
+
     <div class="legend">
         <span class="legend-title">RÉPARTITION DES POSTES</span>
         <span class="legend-note">Jours · Équipes · Postes</span>
     </div>
 
-    <!-- Planning généré automatiquement -->
+    <!-- TABLEAU GÉNÉRÉ PAR JAVASCRIPT -->
+
     <main class="schedule" id="schedule">
 
         <div class="row">
+
             <div class="cell column-head">
                 <strong>JOUR</strong>
                 <small>SEMAINE</small>
             </div>
+
             <div class="cell column-head">
                 <strong>MATIN</strong>
                 <small>ÉQUIPE MATIN</small>
             </div>
+
             <div class="cell column-head">
                 <strong>APRÈS-MIDI</strong>
                 <small>ÉQUIPE APRÈS-MIDI</small>
             </div>
+
             <div class="cell column-head">
                 <strong>NUIT</strong>
                 <small>ÉQUIPE NUIT</small>
             </div>
+
         </div>
 
     </main>
+
+    <!-- PIED DE PAGE -->
 
     <footer class="footer">
         <span><span class="accent">★</span> HEINEKEN</span>
@@ -524,49 +606,61 @@ button:hover {
 
 /* =====================================================
    DONNÉES DU PLANNING
-   Modifier ici les postes si nécessaire.
 ===================================================== */
 
 const planning = [
+
     {
         day: "Dimanche",
         morning: [],
         afternoon: [],
         night: [
-            {post: "1C", role: "Étiqueteur"},
-            {post: "5C", role: "Tech. de production"}
+            {
+                post: "1C",
+                role: "ÉTIQUETEUR"
+            },
+            {
+                post: "5C",
+                role: "TECHNICIEN DE PRODUCTION"
+            }
         ]
     },
+
     {
         day: "Lundi",
         morning: ["1A"],
         afternoon: ["1B"],
         night: ["2A"]
     },
+
     {
         day: "Mardi",
         morning: ["2B"],
         afternoon: ["3A"],
         night: ["3B"]
     },
+
     {
         day: "Mercredi",
         morning: ["4A", "4C"],
         afternoon: ["4B"],
         night: ["5A"]
     },
+
     {
         day: "Jeudi",
         morning: ["5B"],
         afternoon: ["6C"],
         night: ["6A"]
     },
+
     {
         day: "Vendredi",
         morning: ["6B"],
         afternoon: ["2C", "3C"],
         night: []
     }
+
 ];
 
 
@@ -577,41 +671,83 @@ const planning = [
 function createPostCell(posts, shift) {
 
     const cell = document.createElement("div");
+
     cell.className = `cell post ${shift}`;
 
+    /* AUCUN POSTE */
+
     if (!posts || posts.length === 0) {
+
         cell.classList.add("empty");
 
         const empty = document.createElement("span");
+
         empty.textContent = "—";
+
         cell.appendChild(empty);
 
         return cell;
     }
 
-    if (posts.length === 1 && typeof posts[0] === "object") {
-        cell.classList.add("responsibility");
 
-        const strong = document.createElement("strong");
-        strong.textContent = posts[0].post;
+    /* RESPONSABILITÉS INDIVIDUELLES */
 
-        const small = document.createElement("small");
-        small.textContent = posts[0].role;
+    const hasRoles = posts.some(
+        p => typeof p === "object"
+    );
 
-        cell.append(strong, small);
+    if (hasRoles) {
+
+        cell.classList.add("responsibility-list");
+
+        posts.forEach((item, index) => {
+
+            const post = document.createElement("div");
+
+            post.className = "responsibility-item";
+
+            const number = document.createElement("strong");
+
+            number.textContent = item.post;
+
+            const role = document.createElement("small");
+
+            role.textContent = item.role;
+
+            post.append(number, role);
+
+            cell.appendChild(post);
+
+
+            /* Séparation entre les responsabilités */
+
+            if (index < posts.length - 1) {
+
+                const separator = document.createElement("div");
+
+                separator.className = "responsibility-divider";
+
+                cell.appendChild(separator);
+
+            }
+
+        });
+
         return cell;
     }
 
-    const values = posts.map(p =>
-        typeof p === "string" ? p : p.post
-    );
 
-    if (values.length > 1) {
+    /* POSTES CLASSIQUES */
+
+    if (posts.length > 1) {
+
         cell.classList.add("multi");
+
     }
 
     const strong = document.createElement("strong");
-    strong.textContent = values.join(" / ");
+
+    strong.textContent = posts.join(" / ");
 
     cell.appendChild(strong);
 
@@ -628,75 +764,123 @@ const schedule = document.getElementById("schedule");
 planning.forEach((item, index) => {
 
     const row = document.createElement("div");
-    row.className = "row" + (index === 0 ? " sunday" : "");
+
+    row.className = "row" + (
+        index === 0 ? " sunday" : ""
+    );
+
+
+    /* JOUR */
 
     const day = document.createElement("div");
+
     day.className = "cell day";
 
     const dayName = document.createElement("strong");
+
     dayName.textContent = item.day;
 
     const daySub = document.createElement("small");
+
     daySub.textContent = "NETTOYAGE";
 
     day.append(dayName, daySub);
 
     row.appendChild(day);
 
-    row.appendChild(createPostCell(item.morning, "morning"));
-    row.appendChild(createPostCell(item.afternoon, "afternoon"));
-    row.appendChild(createPostCell(item.night, "night"));
+
+    /* MATIN */
+
+    row.appendChild(
+        createPostCell(item.morning, "morning")
+    );
+
+
+    /* APRÈS-MIDI */
+
+    row.appendChild(
+        createPostCell(item.afternoon, "afternoon")
+    );
+
+
+    /* NUIT */
+
+    row.appendChild(
+        createPostCell(item.night, "night")
+    );
+
 
     schedule.appendChild(row);
+
 });
 
 
 /* =====================================================
-   EXPORT PNG HAUTE QUALITÉ
+   EXPORT PNG HAUTE RÉSOLUTION
 ===================================================== */
 
 async function downloadPNG() {
 
     const button = document.querySelector(".toolbar button");
+
     const oldText = button.textContent;
 
     button.disabled = true;
+
     button.textContent = "Génération en cours...";
 
     try {
 
         if (typeof html2canvas === "undefined") {
-            throw new Error("La bibliothèque d'export n'est pas chargée. Vérifiez votre connexion internet.");
+
+            throw new Error(
+                "La bibliothèque d'export n'est pas chargée. Vérifiez votre connexion internet."
+            );
+
         }
 
         const poster = document.getElementById("poster");
 
         const canvas = await html2canvas(poster, {
+
             scale: 3,
+
             backgroundColor: "#00632f",
+
             useCORS: true,
+
             logging: false,
+
             width: poster.offsetWidth,
+
             height: poster.offsetHeight
+
         });
+
 
         const link = document.createElement("a");
 
-        link.download = "Planning_Nettoyage_Postes_Heineken.png";
+        link.download =
+            "Planning_Nettoyage_Postes_Heineken.png";
+
         link.href = canvas.toDataURL("image/png");
 
         link.click();
 
     } catch (error) {
 
-        alert("Impossible de générer l'image : " + error.message);
+        alert(
+            "Impossible de générer l'image : " + error.message
+        );
 
     } finally {
 
         button.disabled = false;
+
         button.textContent = oldText;
 
     }
+
 }
 
 </script>
