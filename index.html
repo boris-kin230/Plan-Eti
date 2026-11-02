@@ -160,7 +160,7 @@
 
         /* --- EN-TÊTE --- */
         .header {
-            height: 19.5mm;
+            height: 18mm;
             flex-shrink: 0;
             display: grid;
             grid-template-columns: 28mm 1fr 28mm;
@@ -206,36 +206,14 @@
             text-align: center;
         }
 
-        .heading-badge {
-            display: inline-block;
-            background: rgba(0, 0, 0, 0.28);
-            border: .25mm solid rgba(255, 255, 255, 0.4);
-            border-radius: 9999px;
-            padding: 1px 7px;
-            font-size: 5.6pt;
-            font-weight: 800;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            color: #E6F3EA;
-            margin-bottom: 1.5px;
-        }
-
         .heading h1 {
-            font-size: 12.8pt;
-            line-height: 1.05;
+            font-size: 14pt;
+            line-height: 1.1;
             font-weight: 900;
             letter-spacing: -.2px;
             text-transform: uppercase;
             color: #FFFFFF;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .heading p {
-            margin-top: 1.5px;
-            font-size: 6.2pt;
-            font-weight: 700;
-            letter-spacing: .6px;
-            color: #CFE5D6;
         }
 
         .zone-box {
@@ -270,64 +248,22 @@
             letter-spacing: .5px;
         }
 
-        /* --- LÉGENDE DU PLANNING --- */
-        .legend-bar {
-            height: 6.2mm;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1.5mm;
-            font-size: 6pt;
-            font-weight: 700;
-            color: #E2ECE5;
-            position: relative;
-            z-index: 2;
-        }
-
-        .legend-items {
-            display: flex;
-            gap: 3mm;
-            align-items: center;
-        }
-
-        .legend-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 1.5mm;
-        }
-
-        .dot-barrier {
-            width: 2.2mm;
-            height: 2.2mm;
-            background: #0B2516;
-            border-radius: 0.5mm;
-            border: .2mm solid #10B981;
-        }
-
-        .dot-door {
-            width: 2.2mm;
-            height: 2.2mm;
-            background: #FFF4D9;
-            border-radius: 0.5mm;
-            border: .25mm solid #D97706;
-        }
-
         /* --- GRILLE / TABLEAU --- */
         .schedule {
             flex: 1;
             min-height: 0;
+            margin-top: 3mm;
             display: grid;
-            grid-template-rows: 6.8mm repeat(7, minmax(0, 1fr));
-            gap: 1.1mm;
+            grid-template-rows: 7mm repeat(7, minmax(0, 1fr));
+            gap: 1.3mm;
             position: relative;
             z-index: 2;
         }
 
         .row {
             display: grid;
-            grid-template-columns: 21mm repeat(3, minmax(0, 1fr));
-            gap: 1.1mm;
+            grid-template-columns: 23mm repeat(3, minmax(0, 1fr));
+            gap: 1.3mm;
             min-height: 0;
         }
 
@@ -347,23 +283,15 @@
             border: .25mm solid rgba(255, 255, 255, 0.3);
             flex-direction: column;
             justify-content: center;
-            gap: 0.4mm;
             color: white;
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
         .column-head strong {
-            font-size: 7.2pt;
+            font-size: 8pt;
             font-weight: 900;
-            letter-spacing: .5px;
+            letter-spacing: .6px;
             text-transform: uppercase;
-        }
-
-        .column-head small {
-            font-size: 5pt;
-            opacity: .85;
-            font-weight: 600;
-            letter-spacing: .3px;
         }
 
         /* JOUR */
@@ -373,25 +301,16 @@
             flex-direction: column;
             justify-content: center;
             padding: 0.8mm;
-            gap: 0.5mm;
-            border-left: 1mm solid var(--gold);
+            border-left: 1.1mm solid var(--gold);
             box-shadow: 0 1px 3px rgba(0,0,0,0.15);
         }
 
         .day strong {
-            font-size: 7.2pt;
+            font-size: 7.8pt;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: .2px;
             line-height: 1;
-        }
-
-        .day span {
-            font-size: 4.8pt;
-            font-weight: 700;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: .4px;
         }
 
         .row.sunday .day {
@@ -626,9 +545,7 @@
             </div>
 
             <div class="heading">
-                <span class="heading-badge">Plan Hebdomadaire</span>
-                <h1>PAL • Barrières & Portes</h1>
-                <p>Programme systématique de nettoyage par poste</p>
+                <h1>Barrières et portes</h1>
             </div>
 
             <div class="zone-box">
@@ -639,50 +556,25 @@
             </div>
         </header>
 
-        <!-- LÉGENDE RAPIDE -->
-        <div class="legend-bar">
-            <div class="legend-items">
-                <div class="legend-pill">
-                    <span class="dot-barrier"></span>
-                    <span>Barrière immatérielle</span>
-                </div>
-                <div class="legend-pill">
-                    <span class="dot-door"></span>
-                    <span>Porte d'accès</span>
-                </div>
-            </div>
-            <span>3 Quarts : Matin • Après-Midi • Nuit</span>
-        </div>
-
         <!-- TABLEAU CENTRAL DU PLANNING -->
         <main class="schedule" id="scheduleTable">
             <!-- Ligne d'en-tête des colonnes -->
             <div class="row">
                 <div class="cell column-head">
                     <strong>JOUR</strong>
-                    <small>Semaine</small>
                 </div>
                 <div class="cell column-head" style="border-top: .4mm solid var(--shift-matin);">
                     <strong>MATIN</strong>
-                    <small>Poste 1</small>
                 </div>
                 <div class="cell column-head" style="border-top: .4mm solid var(--shift-aprem);">
                     <strong>APRÈS-MIDI</strong>
-                    <small>Poste 2</small>
                 </div>
                 <div class="cell column-head" style="border-top: .4mm solid var(--shift-nuit);">
                     <strong>NUIT</strong>
-                    <small>Poste 3</small>
                 </div>
             </div>
             <!-- Les 7 jours seront injectés dynamiquement ici -->
         </main>
-
-        <!-- PIED DE PAGE -->
-        <footer class="footer">
-            <span>Sécurité & Standard Heineken • <span class="accent">Zone PAL</span></span>
-            <span>Nettoyage conforme aux règles d'hygiène et de sécurité</span>
-        </footer>
 
     </div>
 
@@ -690,12 +582,10 @@
     <script>
         /* ==========================================================================
            DONNÉES DU PLANNING (PAL)
-           Couvre l'ensemble des barrières immatérielles et des portes d'accès
            ========================================================================== */
         const planningPAL = [
             {
                 day: "Dimanche",
-                order: "J-0",
                 isSunday: true,
                 morning: null,
                 afternoon: null,
@@ -706,7 +596,6 @@
             },
             {
                 day: "Lundi",
-                order: "J-1",
                 morning: {
                     barriere: "N°4",
                     portes: null
@@ -722,7 +611,6 @@
             },
             {
                 day: "Mardi",
-                order: "J-2",
                 morning: {
                     barriere: "N°15",
                     portes: "Porte N°2 du P1"
@@ -738,7 +626,6 @@
             },
             {
                 day: "Mercredi",
-                order: "J-3",
                 morning: {
                     barriere: "N°9",
                     portes: "Porte N°4 du P1"
@@ -754,7 +641,6 @@
             },
             {
                 day: "Jeudi",
-                order: "J-4",
                 morning: {
                     barriere: "N°1",
                     portes: "Porte N°2 du MSK"
@@ -770,14 +656,13 @@
             },
             {
                 day: "Vendredi",
-                order: "J-5",
                 morning: {
                     barriere: "N°12",
-                    portes: "N°4 du P3 & N°4 MSK"
+                    portes: "Porte N°4 du P3 et N°4 du MSK"
                 },
                 afternoon: {
                     barriere: "N°14",
-                    portes: "N°3 du P3 & N°5 MSK"
+                    portes: "Porte N°3 du P3 et N°5 du MSK"
                 },
                 night: {
                     barriere: "N°13",
@@ -786,7 +671,6 @@
             },
             {
                 day: "Samedi",
-                order: "J-6",
                 morning: {
                     barriere: "N°11",
                     portes: null
@@ -876,11 +760,7 @@
                 const dayName = document.createElement("strong");
                 dayName.textContent = item.day;
 
-                const dayOrder = document.createElement("span");
-                dayOrder.textContent = item.order;
-
                 dayCell.appendChild(dayName);
-                dayCell.appendChild(dayOrder);
                 row.appendChild(dayCell);
 
                 // Matin
