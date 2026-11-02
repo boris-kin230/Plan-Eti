@@ -1,580 +1,971 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Heineken | Programmation PAL</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heineken | Planning Nettoyage PAL</title>
+    <!-- Bibliothèque d'export PNG haute résolution -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --green: #00843D;
+            --dark: #00552B;
+            --deep: #00381C;
+            --red: #E32636;
+            --gold: #D4AF37;
+            --gold-light: #FFF8E7;
+            --gold-border: #C5A03A;
+            --ink: #11281A;
+            --muted: #577062;
+            --white: #FFFFFF;
+            --shift-matin: #0284C7;
+            --shift-aprem: #D97706;
+            --shift-nuit: #4F46E5;
+        }
 
-<style>
-:root {
-    --green: #00843D;
-    --dark: #00552B;
-    --deep: #003B20;
-    --red: #E32636;
-    --gold: #D8B75B;
-    --ink: #173B29;
-    --muted: #718579;
-    --white: #FFFFFF;
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-* {
-    box-sizing: border-box;
-}
+        body {
+            min-height: 100vh;
+            padding: 24px 16px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 16px;
+            background: #0B1F16;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: white;
+            -webkit-font-smoothing: antialiased;
+        }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    padding: 24px 12px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 18px;
-    background: #102C20;
-    font-family: "Segoe UI", Arial, sans-serif;
-}
+        /* --- BARRE D'ACTION --- */
+        .toolbar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            z-index: 20;
+        }
 
-/* EXPORT */
+        .btn-download {
+            border: 0;
+            border-radius: 9999px;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #FFFFFF, #E2F0E7);
+            color: var(--dark);
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: .3px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all .2s ease;
+        }
 
-.toolbar button {
-    border: 0;
-    border-radius: 30px;
-    padding: 13px 25px;
-    background: white;
-    color: var(--dark);
-    font-size: 14px;
-    font-weight: 800;
-    cursor: pointer;
-    box-shadow: 0 5px 20px #0005;
-    transition: .2s;
-}
+        .btn-download:hover {
+            transform: translateY(-2px);
+            background: #ffffff;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+        }
 
-.toolbar button:hover {
-    transform: translateY(-2px);
-    background: #eaf5ed;
-}
+        .btn-download:active {
+            transform: translateY(0);
+        }
 
-.toolbar button:disabled {
-    opacity: .6;
-    cursor: wait;
-}
+        .btn-download:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
 
-/* AFFICHE */
+        .toast-msg {
+            display: none;
+            font-size: 12px;
+            color: #A3D9B5;
+            background: rgba(0, 60, 30, 0.6);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
 
-#poster {
-    width: 150mm;
-    height: 150mm;
-    padding: 5mm;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    isolation: isolate;
-    color: white;
+        /* --- FORMAT DE L'AFFICHE (160mm x 160mm pour accueillir confortablement les 7 jours) --- */
+        #poster {
+            width: 165mm;
+            height: 165mm;
+            padding: 4.5mm 5mm 4mm;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            isolation: isolate;
+            color: white;
+            border-radius: 2mm;
 
-    background:
-        radial-gradient(ellipse at 90% 5%, #ffffff17, transparent 28%),
-        radial-gradient(ellipse at 5% 100%, #ffffff12, transparent 25%),
-        linear-gradient(145deg, #00552B, #00843D 55%, #004C28);
+            background:
+                radial-gradient(ellipse at 95% 5%, rgba(255,255,255,0.14), transparent 32%),
+                radial-gradient(ellipse at 5% 95%, rgba(255,255,255,0.10), transparent 30%),
+                linear-gradient(145deg, #004F27 0%, #007A38 52%, #004422 100%);
 
-    box-shadow: 0 18px 55px #0008;
-}
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+        }
 
-#poster::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    opacity: .08;
-    background-image: radial-gradient(#fff .6px, transparent .8px);
-    background-size: 5px 5px;
-}
+        /* Trame de fond */
+        #poster::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            opacity: .07;
+            background-image: radial-gradient(#fff 0.8px, transparent 0.9px);
+            background-size: 6px 6px;
+        }
 
-.frame {
-    position: absolute;
-    inset: 2.3mm;
-    border: .35mm solid #ffffff55;
-    border-radius: 2mm;
-    pointer-events: none;
-    z-index: 5;
-}
+        /* Double liseré d'encadrement */
+        .frame {
+            position: absolute;
+            inset: 2.2mm;
+            border: .35mm solid rgba(255, 255, 255, 0.45);
+            border-radius: 1.8mm;
+            pointer-events: none;
+            z-index: 10;
+        }
 
-/* DÉCORATIONS */
+        /* --- ÉLÉMENTS DÉCORATIFS BOTANIQUES (ORGES HEINEKEN) --- */
+        .botanical {
+            position: absolute;
+            width: 32mm;
+            height: 50mm;
+            opacity: .13;
+            z-index: -1;
+            pointer-events: none;
+        }
 
-.botanical {
-    position: absolute;
-    width: 35mm;
-    height: 55mm;
-    opacity: .12;
-    z-index: -1;
-    pointer-events: none;
-}
+        .botanical.left {
+            left: -10mm;
+            bottom: -8mm;
+            transform: rotate(-22deg);
+        }
 
-.botanical.left {
-    left: -13mm;
-    bottom: -12mm;
-    transform: rotate(-25deg);
-}
+        .botanical.right {
+            right: -10mm;
+            top: 14mm;
+            transform: rotate(155deg);
+        }
 
-.botanical.right {
-    right: -13mm;
-    top: 18mm;
-    transform: rotate(150deg);
-}
+        /* --- EN-TÊTE --- */
+        .header {
+            height: 19.5mm;
+            flex-shrink: 0;
+            display: grid;
+            grid-template-columns: 28mm 1fr 28mm;
+            align-items: center;
+            padding: 0 1mm 2mm;
+            border-bottom: .4mm solid rgba(255, 255, 255, 0.6);
+            position: relative;
+            z-index: 2;
+        }
 
-/* HEADER */
+        .brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
-.header {
-    height: 25mm;
-    flex-shrink: 0;
-    display: grid;
-    grid-template-columns: 29mm 1fr 23mm;
-    align-items: center;
-    gap: 2mm;
-    padding: 0 1mm 3mm;
-    border-bottom: .45mm solid #ffffff70;
-}
+        .star {
+            font-size: 20pt;
+            line-height: .85;
+            color: #FFFFFF;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.35);
+        }
 
-.brand {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
+        .brand-name {
+            font-family: "Arial Black", Arial, sans-serif;
+            font-size: 9.5pt;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            color: #FFFFFF;
+            margin-top: 1px;
+        }
 
-.star {
-    font-size: 27pt;
-    line-height: .9;
-    color: white;
-    text-shadow: 0 1px 5px #0003;
-}
+        .brand-rule {
+            width: 22mm;
+            height: 0.55mm;
+            background: var(--red);
+            margin-top: 1.5px;
+            border-radius: 1px;
+        }
 
-.brand-name {
-    font-family: Arial Black, Arial, sans-serif;
-    font-size: 11pt;
-    font-weight: 900;
-    letter-spacing: -.5px;
-}
+        .heading {
+            text-align: center;
+        }
 
-.brand-rule {
-    width: 24mm;
-    height: .5mm;
-    background: var(--red);
-    margin-top: 1mm;
-}
+        .heading-badge {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.28);
+            border: .25mm solid rgba(255, 255, 255, 0.4);
+            border-radius: 9999px;
+            padding: 1px 7px;
+            font-size: 5.6pt;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: #E6F3EA;
+            margin-bottom: 1.5px;
+        }
 
-.heading {
-    text-align: center;
-}
+        .heading h1 {
+            font-size: 12.8pt;
+            line-height: 1.05;
+            font-weight: 900;
+            letter-spacing: -.2px;
+            text-transform: uppercase;
+            color: #FFFFFF;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
 
-.heading h1 {
-    margin: 0;
-    font-size: 18pt;
-    line-height: 1.1;
-    font-weight: 900;
-    letter-spacing: -.4px;
-    text-transform: uppercase;
-}
+        .heading p {
+            margin-top: 1.5px;
+            font-size: 6.2pt;
+            font-weight: 700;
+            letter-spacing: .6px;
+            color: #CFE5D6;
+        }
 
-.header-mark {
-    text-align: right;
-}
+        .zone-box {
+            text-align: right;
+            display: flex;
+            justify-content: flex-end;
+        }
 
-.header-mark span {
-    display: inline-block;
-    padding: 2mm;
-    border: .3mm solid #ffffff70;
-    border-radius: 2mm;
-    font-size: 9pt;
-    font-weight: 900;
-}
+        .zone-tag {
+            border: .35mm solid var(--gold);
+            background: rgba(0, 45, 22, 0.55);
+            border-radius: 1.8mm;
+            padding: 1.8mm 2.4mm;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        }
 
-/* TABLEAU */
+        .zone-tag span {
+            display: block;
+            font-size: 5.5pt;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: .6px;
+        }
 
-.schedule {
-    flex: 1;
-    min-height: 0;
-    display: grid;
-    grid-template-rows: 13mm repeat(6, minmax(0, 1fr));
-    gap: 1.5mm;
-    padding-top: 3mm;
-    position: relative;
-    z-index: 2;
-}
+        .zone-tag strong {
+            display: block;
+            font-size: 10pt;
+            font-weight: 900;
+            color: #FFFFFF;
+            line-height: 1;
+            letter-spacing: .5px;
+        }
 
-.row {
-    display: grid;
-    grid-template-columns: 24mm 1fr 1.35fr;
-    gap: 1.5mm;
-    min-height: 0;
-}
+        /* --- LÉGENDE DU PLANNING --- */
+        .legend-bar {
+            height: 6.2mm;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5mm;
+            font-size: 6pt;
+            font-weight: 700;
+            color: #E2ECE5;
+            position: relative;
+            z-index: 2;
+        }
 
-.cell {
-    min-width: 0;
-    border-radius: 1.5mm;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
+        .legend-items {
+            display: flex;
+            gap: 3mm;
+            align-items: center;
+        }
 
-/* EN-TÊTES */
+        .legend-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 1.5mm;
+        }
 
-.column-head {
-    background: #003F23;
-    border: .25mm solid #ffffff45;
-    padding: 1mm;
-}
+        .dot-barrier {
+            width: 2.2mm;
+            height: 2.2mm;
+            background: #0B2516;
+            border-radius: 0.5mm;
+            border: .2mm solid #10B981;
+        }
 
-.column-head strong {
-    font-size: 7.5pt;
-    line-height: 1.2;
-    font-weight: 900;
-    letter-spacing: .2px;
-}
+        .dot-door {
+            width: 2.2mm;
+            height: 2.2mm;
+            background: #FFF4D9;
+            border-radius: 0.5mm;
+            border: .25mm solid #D97706;
+        }
 
-/* JOURS */
+        /* --- GRILLE / TABLEAU --- */
+        .schedule {
+            flex: 1;
+            min-height: 0;
+            display: grid;
+            grid-template-rows: 6.8mm repeat(7, minmax(0, 1fr));
+            gap: 1.1mm;
+            position: relative;
+            z-index: 2;
+        }
 
-.day {
-    background: #F0F5EF;
-    color: var(--dark);
-    border-left: 1mm solid var(--gold);
-}
+        .row {
+            display: grid;
+            grid-template-columns: 21mm repeat(3, minmax(0, 1fr));
+            gap: 1.1mm;
+            min-height: 0;
+        }
 
-.day strong {
-    font-size: 8pt;
-    font-weight: 900;
-    text-transform: uppercase;
-}
+        .cell {
+            min-width: 0;
+            border-radius: 1.4mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
 
-/* DONNÉES */
+        /* EN-TÊTE COLONNES */
+        .column-head {
+            background: #00361C;
+            border: .25mm solid rgba(255, 255, 255, 0.3);
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.4mm;
+            color: white;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
 
-.data {
-    background: #FAFCF9;
-    color: var(--ink);
-    border: .25mm solid #ffffffa0;
-    border-bottom: 1mm solid #6BA9D1;
-    padding: 1mm;
-}
+        .column-head strong {
+            font-size: 7.2pt;
+            font-weight: 900;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+        }
 
-.data strong {
-    font-family: "Arial Black", Arial, sans-serif;
-    font-size: 19pt;
-    line-height: 1.05;
-    font-weight: 900;
-}
+        .column-head small {
+            font-size: 5pt;
+            opacity: .85;
+            font-weight: 600;
+            letter-spacing: .3px;
+        }
 
-.data.door {
-    border-bottom-color: #D1A84D;
-}
+        /* JOUR */
+        .day {
+            background: #EEF4EE;
+            color: var(--dark);
+            flex-direction: column;
+            justify-content: center;
+            padding: 0.8mm;
+            gap: 0.5mm;
+            border-left: 1mm solid var(--gold);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
 
-.data.door strong {
-    font-family: "Segoe UI", Arial, sans-serif;
-    font-size: 10pt;
-    line-height: 1.25;
-    font-weight: 850;
-}
+        .day strong {
+            font-size: 7.2pt;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .2px;
+            line-height: 1;
+        }
 
-.data.empty {
-    background: #ffffff12;
-    border: .25mm dashed #ffffff45;
-}
+        .day span {
+            font-size: 4.8pt;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .4px;
+        }
 
-.data.empty strong {
-    color: #ffffff65;
-    font-size: 11pt;
-}
+        .row.sunday .day {
+            background: #FFFBEB;
+            border-left-color: #F59E0B;
+        }
 
-/* FOOTER */
+        /* CASES DES POSTES */
+        .post {
+            background: #FDFEFC;
+            border: .25mm solid rgba(255, 255, 255, 0.85);
+            position: relative;
+            padding: 0.9mm 1.2mm;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.6mm;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
 
-.footer {
-    height: 5mm;
-    flex-shrink: 0;
-}
+        /* Indicateurs discrets par quart au bas de cellule */
+        .post.morning {
+            border-bottom: 0.8mm solid var(--shift-matin);
+        }
+        .post.afternoon {
+            border-bottom: 0.8mm solid var(--shift-aprem);
+        }
+        .post.night {
+            border-bottom: 0.8mm solid var(--shift-nuit);
+        }
 
-/* IMPRESSION */
+        /* ÉTIQUETTE : BARRIÈRE IMMATÉRIELLE */
+        .badge-barriere {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2mm;
+            background: #0E3621;
+            color: #FFFFFF;
+            border-radius: 0.9mm;
+            padding: 0.6mm 1mm;
+            line-height: 1.05;
+        }
 
-@media print {
-    @page {
-        size: 150mm 150mm;
-        margin: 0;
-    }
+        .badge-barriere .lbl {
+            font-size: 5pt;
+            font-weight: 700;
+            color: #92DCB0;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+        }
 
-    body {
-        margin: 0;
-        padding: 0;
-        background: white;
-    }
+        .badge-barriere .val {
+            font-family: "Arial Black", Arial, sans-serif;
+            font-size: 7.6pt;
+            font-weight: 900;
+            color: #FFFFFF;
+            letter-spacing: -.2px;
+        }
 
-    .toolbar {
-        display: none !important;
-    }
+        /* ÉTIQUETTE : PORTE D'ACCÈS */
+        .badge-porte {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2mm;
+            background: #FFF7ED;
+            color: #7C2D12;
+            border: .22mm solid #FDBA74;
+            border-radius: 0.9mm;
+            padding: 0.4mm 1mm;
+            line-height: 1.05;
+        }
 
-    #poster {
-        box-shadow: none;
-        print-color-adjust: exact;
-        -webkit-print-color-adjust: exact;
-    }
-}
+        .badge-porte .lbl {
+            font-size: 4.8pt;
+            font-weight: 800;
+            color: #C2410C;
+            text-transform: uppercase;
+            letter-spacing: .2px;
+        }
 
-/* ÉCRANS */
+        .badge-porte .val {
+            font-family: "Segoe UI", Arial, sans-serif;
+            font-size: 5.6pt;
+            font-weight: 800;
+            color: #431407;
+            letter-spacing: -.1px;
+            white-space: nowrap;
+        }
 
-@media(max-width: 600px) {
-    #poster {
-        width: 95vw;
-        height: 95vw;
-        padding: 3.2vw;
-    }
+        /* CASE VIDE */
+        .post.empty {
+            background: rgba(255, 255, 255, 0.08);
+            border: .25mm dashed rgba(255, 255, 255, 0.3);
+            border-bottom: .25mm dashed rgba(255, 255, 255, 0.3);
+        }
 
-    .heading h1 {
-        font-size: 3.8vw;
-    }
+        .post.empty .empty-dash {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 10pt;
+            font-weight: 400;
+        }
 
-    .brand-name {
-        font-size: 2.4vw;
-    }
+        /* CELLULE DIMANCHE NUIT MISE EN VALEUR */
+        .post.highlight-sunday {
+            background: #FFFBEB;
+            border: .35mm solid var(--gold-border);
+            border-bottom: 0.8mm solid #D97706;
+        }
 
-    .day strong {
-        font-size: 2.2vw;
-    }
+        /* --- PIED DE PAGE --- */
+        .footer {
+            height: 5.5mm;
+            flex-shrink: 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0 1.5mm;
+            color: #D6E4DA;
+            font-size: 5.2pt;
+            font-weight: 700;
+            letter-spacing: .3px;
+            position: relative;
+            z-index: 2;
+        }
 
-    .column-head strong {
-        font-size: 2vw;
-    }
+        .footer .accent {
+            color: var(--gold);
+            font-weight: 800;
+        }
 
-    .data strong {
-        font-size: 4.5vw;
-    }
+        /* --- IMPRESSION ET AFFICHAGE ÉCRAN --- */
+        @media print {
+            @page {
+                size: 165mm 165mm;
+                margin: 0;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+                background: white;
+            }
+            .toolbar {
+                display: none !important;
+            }
+            #poster {
+                box-shadow: none;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
 
-    .data.door strong {
-        font-size: 2.5vw;
-    }
-}
-</style>
+        @media (max-width: 650px) {
+            #poster {
+                width: 96vw;
+                height: 96vw;
+                padding: 2.8vw;
+            }
+            .header {
+                height: 11vw;
+            }
+            .heading h1 {
+                font-size: 2.6vw;
+            }
+            .star {
+                font-size: 4.5vw;
+            }
+            .brand-name {
+                font-size: 2vw;
+            }
+            .badge-barriere .val {
+                font-size: 2vw;
+            }
+            .badge-porte .val {
+                font-size: 1.6vw;
+            }
+            .day strong {
+                font-size: 1.9vw;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="toolbar">
-    <button onclick="downloadPNG()">
-        ↓ Télécharger le planning PNG
-    </button>
-</div>
+    <!-- BOUTON D'ACTION POUR TÉLÉCHARGEMENT DIRECT PNG -->
+    <div class="toolbar">
+        <button class="btn-download" id="downloadBtn" onclick="downloadPNG()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Télécharger le planning PAL (PNG HD)</span>
+        </button>
+        <span class="toast-msg" id="toastMsg">Export réussi !</span>
+    </div>
 
-<div id="poster">
+    <!-- POSTER DU PLANNING (165 x 165 mm) -->
+    <div id="poster">
 
-    <div class="frame"></div>
+        <!-- Liseré intérieur blanc -->
+        <div class="frame"></div>
 
-    <!-- ORGE GAUCHE -->
-    <svg class="botanical left"
-         viewBox="0 0 150 240"
-         xmlns="http://www.w3.org/2000/svg"
-         fill="none"
-         stroke="#F1D57D"
-         stroke-width="3">
+        <!-- MOTIF ORGE GAUCHE -->
+        <svg class="botanical left" viewBox="0 0 150 240" fill="none" stroke="#F1D57D" stroke-width="2.8">
+            <path d="M20 230 Q70 130 95 10"/>
+            <path d="M53 145 Q15 120 15 95 Q50 100 53 145Z" fill="#F1D57D"/>
+            <path d="M65 110 Q105 75 125 83 Q108 117 65 110Z" fill="#F1D57D"/>
+            <path d="M77 73 Q48 42 58 20 Q83 36 77 73Z" fill="#F1D57D"/>
+            <path d="M40 175 Q10 150 5 135 Q35 140 40 175Z" fill="#F1D57D"/>
+            <path d="M45 175 Q80 135 105 143 Q85 175 45 175Z" fill="#F1D57D"/>
+        </svg>
 
-        <path d="M20 230 Q70 130 95 10"/>
-        <path d="M53 145 Q15 120 15 95 Q50 100 53 145Z" fill="#F1D57D"/>
-        <path d="M65 110 Q105 75 125 83 Q108 117 65 110Z" fill="#F1D57D"/>
-        <path d="M77 73 Q48 42 58 20 Q83 36 77 73Z" fill="#F1D57D"/>
-        <path d="M40 175 Q10 150 5 135 Q35 140 40 175Z" fill="#F1D57D"/>
-        <path d="M45 175 Q80 135 105 143 Q85 175 45 175Z" fill="#F1D57D"/>
+        <!-- MOTIF ORGE DROITE -->
+        <svg class="botanical right" viewBox="0 0 150 240" fill="none" stroke="#F1D57D" stroke-width="2.8">
+            <path d="M20 230 Q70 130 95 10"/>
+            <path d="M53 145 Q15 120 15 95 Q50 100 53 145Z" fill="#F1D57D"/>
+            <path d="M65 110 Q105 75 125 83 Q108 117 65 110Z" fill="#F1D57D"/>
+            <path d="M77 73 Q48 42 58 20 Q83 36 77 73Z" fill="#F1D57D"/>
+            <path d="M40 175 Q10 150 5 135 Q35 140 40 175Z" fill="#F1D57D"/>
+        </svg>
 
-    </svg>
-
-    <!-- ORGE DROITE -->
-    <svg class="botanical right"
-         viewBox="0 0 150 240"
-         xmlns="http://www.w3.org/2000/svg"
-         fill="none"
-         stroke="#F1D57D"
-         stroke-width="3">
-
-        <path d="M20 230 Q70 130 95 10"/>
-        <path d="M53 145 Q15 120 15 95 Q50 100 53 145Z" fill="#F1D57D"/>
-        <path d="M65 110 Q105 75 125 83 Q108 117 65 110Z" fill="#F1D57D"/>
-        <path d="M77 73 Q48 42 58 20 Q83 36 77 73Z" fill="#F1D57D"/>
-        <path d="M40 175 Q10 150 5 135 Q35 140 40 175Z" fill="#F1D57D"/>
-
-    </svg>
-
-    <!-- HEADER -->
-    <header class="header">
-
-        <div class="brand">
-            <div class="star">★</div>
-            <div class="brand-name">HEINEKEN</div>
-            <div class="brand-rule"></div>
-        </div>
-
-        <div class="heading">
-            <h1>Programmation<br>PAL</h1>
-        </div>
-
-        <div class="header-mark">
-            <span>PAL</span>
-        </div>
-
-    </header>
-
-    <!-- TABLEAU -->
-    <main class="schedule" id="schedule">
-
-        <div class="row">
-            <div class="cell column-head">
-                <strong>JOUR</strong>
+        <!-- EN-TÊTE OFFICIEL -->
+        <header class="header">
+            <div class="brand">
+                <div class="star">★</div>
+                <div class="brand-name">HEINEKEN</div>
+                <div class="brand-rule"></div>
             </div>
 
-            <div class="cell column-head">
-                <strong>BARRIÈRES<br>IMMATÉRIELLES</strong>
+            <div class="heading">
+                <span class="heading-badge">Plan Hebdomadaire</span>
+                <h1>PAL • Barrières & Portes</h1>
+                <p>Programme systématique de nettoyage par poste</p>
             </div>
 
-            <div class="cell column-head">
-                <strong>PORTES<br>D'ACCÈS</strong>
+            <div class="zone-box">
+                <div class="zone-tag">
+                    <span>SECTEUR</span>
+                    <strong>PAL</strong>
+                </div>
             </div>
+        </header>
+
+        <!-- LÉGENDE RAPIDE -->
+        <div class="legend-bar">
+            <div class="legend-items">
+                <div class="legend-pill">
+                    <span class="dot-barrier"></span>
+                    <span>Barrière immatérielle</span>
+                </div>
+                <div class="legend-pill">
+                    <span class="dot-door"></span>
+                    <span>Porte d'accès</span>
+                </div>
+            </div>
+            <span>3 Quarts : Matin • Après-Midi • Nuit</span>
         </div>
 
-    </main>
+        <!-- TABLEAU CENTRAL DU PLANNING -->
+        <main class="schedule" id="scheduleTable">
+            <!-- Ligne d'en-tête des colonnes -->
+            <div class="row">
+                <div class="cell column-head">
+                    <strong>JOUR</strong>
+                    <small>Semaine</small>
+                </div>
+                <div class="cell column-head" style="border-top: .4mm solid var(--shift-matin);">
+                    <strong>MATIN</strong>
+                    <small>Poste 1</small>
+                </div>
+                <div class="cell column-head" style="border-top: .4mm solid var(--shift-aprem);">
+                    <strong>APRÈS-MIDI</strong>
+                    <small>Poste 2</small>
+                </div>
+                <div class="cell column-head" style="border-top: .4mm solid var(--shift-nuit);">
+                    <strong>NUIT</strong>
+                    <small>Poste 3</small>
+                </div>
+            </div>
+            <!-- Les 7 jours seront injectés dynamiquement ici -->
+        </main>
 
-    <div class="footer"></div>
+        <!-- PIED DE PAGE -->
+        <footer class="footer">
+            <span>Sécurité & Standard Heineken • <span class="accent">Zone PAL</span></span>
+            <span>Nettoyage conforme aux règles d'hygiène et de sécurité</span>
+        </footer>
 
-</div>
+    </div>
 
-<script>
+    <!-- SCRIPT DE GÉNÉRATION DU PLANNING ET EXPORT -->
+    <script>
+        /* ==========================================================================
+           DONNÉES DU PLANNING (PAL)
+           Couvre l'ensemble des barrières immatérielles et des portes d'accès
+           ========================================================================== */
+        const planningPAL = [
+            {
+                day: "Dimanche",
+                order: "J-0",
+                isSunday: true,
+                morning: null,
+                afternoon: null,
+                night: {
+                    barriere: "N°10",
+                    portes: "Porte N°1"
+                }
+            },
+            {
+                day: "Lundi",
+                order: "J-1",
+                morning: {
+                    barriere: "N°4",
+                    portes: null
+                },
+                afternoon: {
+                    barriere: "N°5",
+                    portes: null
+                },
+                night: {
+                    barriere: "N°18",
+                    portes: null
+                }
+            },
+            {
+                day: "Mardi",
+                order: "J-2",
+                morning: {
+                    barriere: "N°15",
+                    portes: "Porte N°2 du P1"
+                },
+                afternoon: {
+                    barriere: "N°6",
+                    portes: "Porte N°3 du P1"
+                },
+                night: {
+                    barriere: "N°7",
+                    portes: null
+                }
+            },
+            {
+                day: "Mercredi",
+                order: "J-3",
+                morning: {
+                    barriere: "N°9",
+                    portes: "Porte N°4 du P1"
+                },
+                afternoon: {
+                    barriere: "N°8",
+                    portes: "N°1 du MSK"
+                },
+                night: {
+                    barriere: "N°2",
+                    portes: null
+                }
+            },
+            {
+                day: "Jeudi",
+                order: "J-4",
+                morning: {
+                    barriere: "N°1",
+                    portes: "Porte N°2 du MSK"
+                },
+                afternoon: {
+                    barriere: "N°16",
+                    portes: "Porte N°1 du P3"
+                },
+                night: {
+                    barriere: "N°3",
+                    portes: "Porte N°3 du MSK"
+                }
+            },
+            {
+                day: "Vendredi",
+                order: "J-5",
+                morning: {
+                    barriere: "N°12",
+                    portes: "N°4 du P3 & N°4 MSK"
+                },
+                afternoon: {
+                    barriere: "N°14",
+                    portes: "N°3 du P3 & N°5 MSK"
+                },
+                night: {
+                    barriere: "N°13",
+                    portes: "Porte N°6 du MSK"
+                }
+            },
+            {
+                day: "Samedi",
+                order: "J-6",
+                morning: {
+                    barriere: "N°11",
+                    portes: null
+                },
+                afternoon: {
+                    barriere: "N°17",
+                    portes: null
+                },
+                night: null
+            }
+        ];
 
-/* DONNÉES DU PLANNING */
+        /* ==========================================================================
+           CONSTRUCTION D'UNE CELLULE
+           Format compact et hyper lisible avec badge sombre (barrière) et doré (porte)
+           ========================================================================== */
+        function createCell(data, shift, isSundayNight = false) {
+            const cell = document.createElement("div");
+            cell.className = `cell post ${shift}`;
 
-const planning = [
-    {
-        day: "Lundi",
-        barrier: "N°4",
-        door: ""
-    },
-    {
-        day: "Mardi",
-        barrier: "N°15",
-        door: "Porte N°2 du P1"
-    },
-    {
-        day: "Mercredi",
-        barrier: "N°9",
-        door: "Porte N°4 du P1"
-    },
-    {
-        day: "Jeudi",
-        barrier: "N°1",
-        door: "Porte N°2 du MSK"
-    },
-    {
-        day: "Vendredi",
-        barrier: "N°12",
-        door: "Porte N°4 du P3<br>et N°4 du MSK"
-    },
-    {
-        day: "Samedi",
-        barrier: "N°11",
-        door: ""
-    }
-];
+            if (!data) {
+                cell.classList.add("empty");
+                const dash = document.createElement("span");
+                dash.className = "empty-dash";
+                dash.textContent = "—";
+                cell.appendChild(dash);
+                return cell;
+            }
 
+            if (isSundayNight) {
+                cell.classList.add("highlight-sunday");
+            }
 
-/* CRÉATION DES CELLULES */
+            // Badge Barrière Immatérielle
+            if (data.barriere) {
+                const bTag = document.createElement("div");
+                bTag.className = "badge-barriere";
 
-const schedule = document.getElementById("schedule");
+                const bLbl = document.createElement("span");
+                bLbl.className = "lbl";
+                bLbl.textContent = "Barr.";
 
-planning.forEach(item => {
+                const bVal = document.createElement("span");
+                bVal.className = "val";
+                bVal.textContent = data.barriere;
 
-    const row = document.createElement("div");
-    row.className = "row";
+                bTag.appendChild(bLbl);
+                bTag.appendChild(bVal);
+                cell.appendChild(bTag);
+            }
 
-    const day = document.createElement("div");
-    day.className = "cell day";
+            // Badge Porte(s) d'accès
+            if (data.portes) {
+                const pTag = document.createElement("div");
+                pTag.className = "badge-porte";
 
-    const dayName = document.createElement("strong");
-    dayName.textContent = item.day;
+                const pLbl = document.createElement("span");
+                pLbl.className = "lbl";
+                pLbl.textContent = "Porte";
 
-    day.appendChild(dayName);
-    row.appendChild(day);
+                const pVal = document.createElement("span");
+                pVal.className = "val";
+                pVal.textContent = data.portes;
 
-    const barrier = document.createElement("div");
-    barrier.className = "cell data";
+                pTag.appendChild(pLbl);
+                pTag.appendChild(pVal);
+                cell.appendChild(pTag);
+            }
 
-    const barrierText = document.createElement("strong");
-    barrierText.textContent = item.barrier;
-
-    barrier.appendChild(barrierText);
-    row.appendChild(barrier);
-
-    const door = document.createElement("div");
-    door.className = "cell data door";
-
-    if (item.door) {
-        const doorText = document.createElement("strong");
-        doorText.innerHTML = item.door;
-        door.appendChild(doorText);
-    } else {
-        door.classList.add("empty");
-
-        const empty = document.createElement("strong");
-        empty.textContent = "—";
-
-        door.appendChild(empty);
-    }
-
-    row.appendChild(door);
-    schedule.appendChild(row);
-
-});
-
-
-/* EXPORT PNG HAUTE RÉSOLUTION */
-
-async function downloadPNG() {
-
-    const button = document.querySelector(".toolbar button");
-    const oldText = button.textContent;
-
-    button.disabled = true;
-    button.textContent = "Génération en cours...";
-
-    try {
-
-        if (typeof html2canvas === "undefined") {
-            throw new Error("Bibliothèque d'export non chargée. Vérifiez votre connexion.");
+            return cell;
         }
 
-        const poster = document.getElementById("poster");
+        /* ==========================================================================
+           GÉNÉRATION DYNAMIQUE DE LA GRILLE
+           ========================================================================== */
+        function renderSchedule() {
+            const table = document.getElementById("scheduleTable");
 
-        const canvas = await html2canvas(poster, {
-            scale: 3,
-            backgroundColor: "#00552B",
-            useCORS: true,
-            logging: false,
-            width: poster.offsetWidth,
-            height: poster.offsetHeight
-        });
+            planningPAL.forEach((item) => {
+                const row = document.createElement("div");
+                row.className = "row" + (item.isSunday ? " sunday" : "");
 
-        const link = document.createElement("a");
+                // Colonne Jour
+                const dayCell = document.createElement("div");
+                dayCell.className = "cell day";
 
-        link.download = "Programmation_PAL_Heineken.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
+                const dayName = document.createElement("strong");
+                dayName.textContent = item.day;
 
-    } catch (error) {
+                const dayOrder = document.createElement("span");
+                dayOrder.textContent = item.order;
 
-        alert("Erreur lors de l'export : " + error.message);
+                dayCell.appendChild(dayName);
+                dayCell.appendChild(dayOrder);
+                row.appendChild(dayCell);
 
-    } finally {
+                // Matin
+                row.appendChild(createCell(item.morning, "morning"));
 
-        button.disabled = false;
-        button.textContent = oldText;
+                // Après-midi
+                row.appendChild(createCell(item.afternoon, "afternoon"));
 
-    }
+                // Nuit (avec mise en valeur le Dimanche)
+                const isSundayNight = item.day === "Dimanche";
+                row.appendChild(createCell(item.night, "night", isSundayNight));
 
-}
+                table.appendChild(row);
+            });
+        }
 
-</script>
+        /* Initialiser le tableau au chargement */
+        window.addEventListener("DOMContentLoaded", renderSchedule);
+
+        /* ==========================================================================
+           EXPORT PNG HAUTE DÉFINITION (html2canvas)
+           ========================================================================== */
+        async function downloadPNG() {
+            const btn = document.getElementById("downloadBtn");
+            const toast = document.getElementById("toastMsg");
+            const originalContent = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.innerHTML = `
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite;">
+                    <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="16"></circle>
+                </svg>
+                <span>Exportation HD en cours...</span>
+            `;
+
+            try {
+                if (typeof html2canvas === "undefined") {
+                    throw new Error("La bibliothèque html2canvas n'a pas pu être chargée.");
+                }
+
+                const poster = document.getElementById("poster");
+
+                // Génération de l'image avec facteur d'échelle x3 pour un rendu ultra-net
+                const canvas = await html2canvas(poster, {
+                    scale: 3,
+                    backgroundColor: "#004F27",
+                    useCORS: true,
+                    logging: false,
+                    width: poster.offsetWidth,
+                    height: poster.offsetHeight
+                });
+
+                const link = document.createElement("a");
+                link.download = "Planning_Nettoyage_PAL_Heineken.png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+
+                // Affichage retour utilisateur
+                if (toast) {
+                    toast.style.display = "inline-block";
+                    setTimeout(() => {
+                        toast.style.display = "none";
+                    }, 3500);
+                }
+
+            } catch (err) {
+                console.error("Erreur export :", err);
+                const errorBox = document.createElement("div");
+                errorBox.style.cssText = "position:fixed; top:20px; background:#b91c1c; color:#fff; padding:12px 20px; border-radius:8px; z-index:9999; font-weight:bold;";
+                errorBox.textContent = "Erreur lors de l'export : " + err.message;
+                document.body.appendChild(errorBox);
+                setTimeout(() => errorBox.remove(), 4000);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
+        }
+    </script>
+
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
 
 </body>
 </html>
