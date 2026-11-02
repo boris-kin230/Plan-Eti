@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Heineken | Planning de nettoyage</title>
+<title>Heineken | Programmation PAL</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -88,8 +87,7 @@ body {
     inset: 0;
     z-index: -1;
     opacity: .08;
-    background-image:
-        radial-gradient(#fff .6px, transparent .8px);
+    background-image: radial-gradient(#fff .6px, transparent .8px);
     background-size: 5px 5px;
 }
 
@@ -102,7 +100,7 @@ body {
     z-index: 5;
 }
 
-/* DÉCORATIONS BOTANIQUES */
+/* DÉCORATIONS */
 
 .botanical {
     position: absolute;
@@ -128,7 +126,7 @@ body {
 /* HEADER */
 
 .header {
-    height: 22mm;
+    height: 25mm;
     flex-shrink: 0;
     display: grid;
     grid-template-columns: 29mm 1fr 23mm;
@@ -172,19 +170,11 @@ body {
 
 .heading h1 {
     margin: 0;
-    font-size: 16pt;
-    line-height: 1.08;
+    font-size: 18pt;
+    line-height: 1.1;
     font-weight: 900;
     letter-spacing: -.4px;
     text-transform: uppercase;
-}
-
-.heading p {
-    margin: 2mm 0 0;
-    font-size: 7pt;
-    font-weight: 750;
-    letter-spacing: 1.1px;
-    color: #e2eddf;
 }
 
 .header-mark {
@@ -196,33 +186,8 @@ body {
     padding: 2mm;
     border: .3mm solid #ffffff70;
     border-radius: 2mm;
-    font-size: 7pt;
+    font-size: 9pt;
     font-weight: 900;
-    line-height: 1.4;
-    letter-spacing: .4px;
-}
-
-/* INTRODUCTION */
-
-.legend {
-    height: 10mm;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1mm;
-}
-
-.legend-title {
-    font-size: 8pt;
-    font-weight: 900;
-    letter-spacing: .7px;
-}
-
-.legend-note {
-    font-size: 6.5pt;
-    color: #dceade;
-    font-weight: 600;
 }
 
 /* TABLEAU */
@@ -231,16 +196,17 @@ body {
     flex: 1;
     min-height: 0;
     display: grid;
-    grid-template-rows: 10mm repeat(6, minmax(0, 1fr));
-    gap: 1.4mm;
+    grid-template-rows: 13mm repeat(6, minmax(0, 1fr));
+    gap: 1.5mm;
+    padding-top: 3mm;
     position: relative;
     z-index: 2;
 }
 
 .row {
     display: grid;
-    grid-template-columns: 25mm repeat(3, minmax(0, 1fr));
-    gap: 1.4mm;
+    grid-template-columns: 24mm 1fr 1.35fr;
+    gap: 1.5mm;
     min-height: 0;
 }
 
@@ -257,21 +223,15 @@ body {
 
 .column-head {
     background: #003F23;
-    border: .25mm solid #ffffff35;
-    flex-direction: column;
-    gap: 1mm;
-    color: white;
+    border: .25mm solid #ffffff45;
+    padding: 1mm;
 }
 
 .column-head strong {
-    font-size: 8.5pt;
-    letter-spacing: .4px;
-}
-
-.column-head small {
-    font-size: 5.8pt;
-    opacity: .8;
-    font-weight: 600;
+    font-size: 7.5pt;
+    line-height: 1.2;
+    font-weight: 900;
+    letter-spacing: .2px;
 }
 
 /* JOURS */
@@ -279,8 +239,6 @@ body {
 .day {
     background: #F0F5EF;
     color: var(--dark);
-    flex-direction: column;
-    gap: 1mm;
     border-left: 1mm solid var(--gold);
 }
 
@@ -290,90 +248,40 @@ body {
     text-transform: uppercase;
 }
 
-.day small {
-    font-size: 5.7pt;
-    font-weight: 700;
-    color: var(--muted);
-}
+/* DONNÉES */
 
-/* POSTES */
-
-.post {
+.data {
     background: #FAFCF9;
     color: var(--ink);
     border: .25mm solid #ffffffa0;
-    position: relative;
-    padding: 1mm;
-    flex-direction: column;
-    gap: 1mm;
-}
-
-.post strong {
-    font-family: "Arial Black", Arial, sans-serif;
-    font-size: 18pt;
-    line-height: 1;
-    font-weight: 900;
-    letter-spacing: -.4px;
-    white-space: nowrap;
-}
-
-.post small {
-    font-size: 6pt;
-    line-height: 1.15;
-    font-weight: 750;
-    color: var(--muted);
-    text-transform: uppercase;
-}
-
-/* ACCENTS PAR ÉQUIPE */
-
-.post.morning {
     border-bottom: 1mm solid #6BA9D1;
-}
-
-.post.afternoon {
-    border-bottom: 1mm solid #D1A84D;
-}
-
-.post.night {
-    border-bottom: 1mm solid #305C45;
-}
-
-/* PLUSIEURS POSTES */
-
-.post.multi strong {
-    font-size: 15pt;
-}
-
-/* DIMANCHE */
-
-.row.sunday .day {
-    background: #E5EEE5;
-}
-
-/* DIMANCHE NUIT : 1C / 5C (PGP) */
-
-.post.sunday-night {
-    background: #FFF5DB;
-    border: .45mm solid var(--gold);
-    border-bottom: 1mm solid #B99535;
     padding: 1mm;
 }
 
-.post.sunday-night strong {
-    font-size: 13.5pt;
-    color: #684B0A;
-    letter-spacing: -.5px;
+.data strong {
+    font-family: "Arial Black", Arial, sans-serif;
+    font-size: 19pt;
+    line-height: 1.05;
+    font-weight: 900;
 }
 
-/* CELLULES VIDES */
+.data.door {
+    border-bottom-color: #D1A84D;
+}
 
-.post.empty {
+.data.door strong {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.25;
+    font-weight: 850;
+}
+
+.data.empty {
     background: #ffffff12;
     border: .25mm dashed #ffffff45;
 }
 
-.post.empty span {
+.data.empty strong {
     color: #ffffff65;
     font-size: 11pt;
 }
@@ -381,20 +289,8 @@ body {
 /* FOOTER */
 
 .footer {
-    height: 7mm;
+    height: 5mm;
     flex-shrink: 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    padding: 0 1mm;
-    color: #e4eee5;
-    font-size: 6pt;
-    font-weight: 700;
-    letter-spacing: .4px;
-}
-
-.footer .accent {
-    color: var(--gold);
 }
 
 /* IMPRESSION */
@@ -432,23 +328,27 @@ body {
     }
 
     .heading h1 {
-        font-size: 3.2vw;
+        font-size: 3.8vw;
     }
 
     .brand-name {
         font-size: 2.4vw;
     }
 
-    .post strong {
-        font-size: 4.2vw;
-    }
-
-    .post.sunday-night strong {
-        font-size: 3.1vw;
-    }
-
     .day strong {
         font-size: 2.2vw;
+    }
+
+    .column-head strong {
+        font-size: 2vw;
+    }
+
+    .data strong {
+        font-size: 4.5vw;
+    }
+
+    .data.door strong {
+        font-size: 2.5vw;
     }
 }
 </style>
@@ -467,7 +367,6 @@ body {
     <div class="frame"></div>
 
     <!-- ORGE GAUCHE -->
-
     <svg class="botanical left"
          viewBox="0 0 150 240"
          xmlns="http://www.w3.org/2000/svg"
@@ -485,7 +384,6 @@ body {
     </svg>
 
     <!-- ORGE DROITE -->
-
     <svg class="botanical right"
          viewBox="0 0 150 240"
          xmlns="http://www.w3.org/2000/svg"
@@ -502,7 +400,6 @@ body {
     </svg>
 
     <!-- HEADER -->
-
     <header class="header">
 
         <div class="brand">
@@ -512,214 +409,133 @@ body {
         </div>
 
         <div class="heading">
-            <h1>Planning de<br>nettoyage des postes</h1>
+            <h1>Programmation<br>PAL</h1>
+        </div>
+
+        <div class="header-mark">
+            <span>PAL</span>
         </div>
 
     </header>
 
-    <!-- PLANNING -->
-
+    <!-- TABLEAU -->
     <main class="schedule" id="schedule">
 
         <div class="row">
-
             <div class="cell column-head">
                 <strong>JOUR</strong>
             </div>
 
             <div class="cell column-head">
-                <strong>MATIN</strong>
-      
+                <strong>BARRIÈRES<br>IMMATÉRIELLES</strong>
             </div>
 
             <div class="cell column-head">
-                <strong>APRÈS-MIDI</strong>
-           
+                <strong>PORTES<br>D'ACCÈS</strong>
             </div>
-
-            <div class="cell column-head">
-                <strong>NUIT</strong>
-         
-            </div>
-
         </div>
 
     </main>
+
+    <div class="footer"></div>
 
 </div>
 
 <script>
 
-/* ==============================================
-   DONNÉES DU PLANNING
-============================================== */
+/* DONNÉES DU PLANNING */
 
 const planning = [
-
-    {
-        day: "Dimanche",
-        morning: [],
-        afternoon: [],
-        night: ["1C / 5C (PGP)"]
-    },
-
     {
         day: "Lundi",
-        morning: ["1A"],
-        afternoon: ["1B"],
-        night: ["2A"]
+        barrier: "N°4",
+        door: ""
     },
-
     {
         day: "Mardi",
-        morning: ["2B"],
-        afternoon: ["3A"],
-        night: ["3B"]
+        barrier: "N°15",
+        door: "Porte N°2 du P1"
     },
-
     {
         day: "Mercredi",
-        morning: ["4A", "4C"],
-        afternoon: ["4B"],
-        night: ["5A"]
+        barrier: "N°9",
+        door: "Porte N°4 du P1"
     },
-
     {
         day: "Jeudi",
-        morning: ["5B"],
-        afternoon: ["6C"],
-        night: ["6A"]
+        barrier: "N°1",
+        door: "Porte N°2 du MSK"
     },
-
     {
         day: "Vendredi",
-        morning: ["6B"],
-        afternoon: ["2C", "3C"],
-        night: []
+        barrier: "N°12",
+        door: "Porte N°4 du P3<br>et N°4 du MSK"
+    },
+    {
+        day: "Samedi",
+        barrier: "N°11",
+        door: ""
     }
-
 ];
 
 
-/* ==============================================
-   CRÉATION DES CELLULES
-============================================== */
-
-function createPostCell(posts, shift, day) {
-
-    const cell = document.createElement("div");
-
-    cell.className = `cell post ${shift}`;
-
-    /* Cellule vide */
-
-    if (!posts || posts.length === 0) {
-
-        cell.classList.add("empty");
-
-        const empty = document.createElement("span");
-
-        empty.textContent = "—";
-
-        cell.appendChild(empty);
-
-        return cell;
-    }
-
-    /* Dimanche nuit : présentation spécifique */
-
-    if (day === "Dimanche" && shift === "night") {
-
-        cell.classList.add("sunday-night");
-
-        const strong = document.createElement("strong");
-
-        strong.textContent = "1C / 5C(PGP)";
-
-        cell.appendChild(strong);
-
-        return cell;
-    }
-
-    /* Postes standards */
-
-    if (posts.length > 1) {
-        cell.classList.add("multi");
-    }
-
-    const strong = document.createElement("strong");
-
-    strong.textContent = posts.join(" / ");
-
-    cell.appendChild(strong);
-
-    return cell;
-}
-
-
-/* ==============================================
-   GÉNÉRATION DU TABLEAU
-============================================== */
+/* CRÉATION DES CELLULES */
 
 const schedule = document.getElementById("schedule");
 
-planning.forEach((item, index) => {
+planning.forEach(item => {
 
     const row = document.createElement("div");
-
-    row.className = "row" + (
-        index === 0 ? " sunday" : ""
-    );
-
-    /* JOUR */
+    row.className = "row";
 
     const day = document.createElement("div");
-
     day.className = "cell day";
 
     const dayName = document.createElement("strong");
-
     dayName.textContent = item.day;
 
-   day.appendChild(dayName);
-
+    day.appendChild(dayName);
     row.appendChild(day);
 
-    /* MATIN */
+    const barrier = document.createElement("div");
+    barrier.className = "cell data";
 
-    row.appendChild(
-        createPostCell(item.morning, "morning", item.day)
-    );
+    const barrierText = document.createElement("strong");
+    barrierText.textContent = item.barrier;
 
-    /* APRÈS-MIDI */
+    barrier.appendChild(barrierText);
+    row.appendChild(barrier);
 
-    row.appendChild(
-        createPostCell(item.afternoon, "afternoon", item.day)
-    );
+    const door = document.createElement("div");
+    door.className = "cell data door";
 
-    /* NUIT */
+    if (item.door) {
+        const doorText = document.createElement("strong");
+        doorText.innerHTML = item.door;
+        door.appendChild(doorText);
+    } else {
+        door.classList.add("empty");
 
-    row.appendChild(
-        createPostCell(item.night, "night", item.day)
-    );
+        const empty = document.createElement("strong");
+        empty.textContent = "—";
 
+        door.appendChild(empty);
+    }
+
+    row.appendChild(door);
     schedule.appendChild(row);
 
 });
 
 
-/* ==============================================
-   EXPORT PNG HAUTE RÉSOLUTION
-============================================== */
+/* EXPORT PNG HAUTE RÉSOLUTION */
 
 async function downloadPNG() {
 
     const button = document.querySelector(".toolbar button");
-
     const oldText = button.textContent;
 
     button.disabled = true;
-
     button.textContent = "Génération en cours...";
 
     try {
@@ -731,27 +547,18 @@ async function downloadPNG() {
         const poster = document.getElementById("poster");
 
         const canvas = await html2canvas(poster, {
-
             scale: 3,
-
             backgroundColor: "#00552B",
-
             useCORS: true,
-
             logging: false,
-
             width: poster.offsetWidth,
-
             height: poster.offsetHeight
-
         });
 
         const link = document.createElement("a");
 
-        link.download = "Planning_Nettoyage_Postes_Heineken.png";
-
+        link.download = "Programmation_PAL_Heineken.png";
         link.href = canvas.toDataURL("image/png");
-
         link.click();
 
     } catch (error) {
@@ -761,7 +568,6 @@ async function downloadPNG() {
     } finally {
 
         button.disabled = false;
-
         button.textContent = oldText;
 
     }
