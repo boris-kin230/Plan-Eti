@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Score 8x3 cm - Style Heineken</title>
+    <title>Score 8x3 cm - Étiquette professionnelle</title>
+
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
     <style>
@@ -25,9 +27,8 @@
             padding: 20px;
         }
 
-        /* =========================================================
-           CARTE EXACTE 8 CM x 3 CM - BORDURE & FILIGRANE HEINEKEN
-           ========================================================= */
+        /* CARTE 8 CM x 3 CM */
+
         #score-card {
             width: 8cm;
             height: 3cm;
@@ -36,12 +37,27 @@
             border: 2.5px solid #00682B;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             position: relative;
+            isolation: isolate;
             overflow: hidden;
             padding: 3px;
             font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
         }
 
-        /* Liseré intérieur argenté et vert façon étiquette Heineken */
+        /* FILIGRANE : ORGE, MALT ET BOUTEILLES */
+
+        .bg-watermark {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.20;
+        }
+
+        /* CADRE INTÉRIEUR */
+
         .inner-frame {
             width: 100%;
             height: 100%;
@@ -55,20 +71,11 @@
             justify-content: space-between;
             position: relative;
             z-index: 1;
+            background: transparent;
         }
 
-        /* Filigrane arrière-plan (orge, malt, bouteilles) très léger */
-        .bg-watermark {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.075;
-        }
+        /* EN-TÊTE */
 
-        /* En-tête avec étoile rouge parfaitement alignée */
         .score-header {
             display: flex;
             align-items: center;
@@ -96,7 +103,8 @@
             transform: translateY(0.5px);
         }
 
-        /* Liste des 4 critères */
+        /* LISTE DES CRITÈRES */
+
         .score-list {
             display: flex;
             flex-direction: column;
@@ -125,9 +133,8 @@
             min-width: 14px;
         }
 
-        /* =========================================================
-           BOUTON ET APERÇU PNG
-           ========================================================= */
+        /* BOUTON DE TÉLÉCHARGEMENT */
+
         .controls {
             display: flex;
             flex-direction: column;
@@ -153,6 +160,11 @@
             background: #004F20;
         }
 
+        .btn-download:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
         .preview-zone {
             text-align: center;
             font-size: 13px;
@@ -166,127 +178,364 @@
             border-radius: 9px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
+
     </style>
 </head>
+
 <body>
 
-    <!-- Vignette 8 cm x 3 cm -->
+    <!-- CARTE 8 CM x 3 CM -->
+
     <div id="score-card">
-        <!-- Motif en filigrane : Épis d'orge, grains de malt et bouteilles -->
-        <svg class="bg-watermark" viewBox="0 0 302 113" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Épi d'orge gauche -->
-            <g stroke="#00682B" stroke-width="1.3" stroke-linecap="round" fill="#00682B" fill-opacity="0.35">
-                <path d="M18 105 Q 32 62 56 18" fill="none" stroke-width="1.5"/>
-                <ellipse cx="24" cy="84" rx="5" ry="2.2" transform="rotate(-35 24 84)"/>
-                <ellipse cx="33" cy="89" rx="5" ry="2.2" transform="rotate(15 33 89)"/>
-                <ellipse cx="30" cy="70" rx="5" ry="2.2" transform="rotate(-35 30 70)"/>
-                <ellipse cx="39" cy="75" rx="5" ry="2.2" transform="rotate(15 39 75)"/>
-                <ellipse cx="36" cy="56" rx="5" ry="2.2" transform="rotate(-35 36 56)"/>
-                <ellipse cx="45" cy="61" rx="5" ry="2.2" transform="rotate(15 45 61)"/>
-                <ellipse cx="43" cy="42" rx="5" ry="2.2" transform="rotate(-35 43 42)"/>
-                <ellipse cx="52" cy="47" rx="5" ry="2.2" transform="rotate(15 52 47)"/>
-                <ellipse cx="50" cy="29" rx="4.5" ry="2" transform="rotate(-35 50 29)"/>
-                <ellipse cx="58" cy="34" rx="4.5" ry="2" transform="rotate(15 58 34)"/>
-                <!-- Barbes d'orge -->
-                <line x1="50" y1="26" x2="58" y2="12" stroke-width="1"/>
-                <line x1="56" y1="22" x2="67" y2="10" stroke-width="1"/>
-                <line x1="60" y1="31" x2="72" y2="20" stroke-width="1"/>
+
+        <!-- FILIGRANE SVG -->
+
+        <svg
+            class="bg-watermark"
+            viewBox="0 0 302 113"
+            preserveAspectRatio="none"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+
+            <!-- ÉPI D'ORGE GAUCHE -->
+
+            <g stroke="#00682B"
+               stroke-width="1.3"
+               stroke-linecap="round"
+               fill="#00682B"
+               fill-opacity="0.55">
+
+                <path d="M18 105 Q 32 62 56 18"
+                      fill="none"
+                      stroke-width="1.5"/>
+
+                <ellipse cx="24" cy="84" rx="5" ry="2.2"
+                         transform="rotate(-35 24 84)"/>
+
+                <ellipse cx="33" cy="89" rx="5" ry="2.2"
+                         transform="rotate(15 33 89)"/>
+
+                <ellipse cx="30" cy="70" rx="5" ry="2.2"
+                         transform="rotate(-35 30 70)"/>
+
+                <ellipse cx="39" cy="75" rx="5" ry="2.2"
+                         transform="rotate(15 39 75)"/>
+
+                <ellipse cx="36" cy="56" rx="5" ry="2.2"
+                         transform="rotate(-35 36 56)"/>
+
+                <ellipse cx="45" cy="61" rx="5" ry="2.2"
+                         transform="rotate(15 45 61)"/>
+
+                <ellipse cx="43" cy="42" rx="5" ry="2.2"
+                         transform="rotate(-35 43 42)"/>
+
+                <ellipse cx="52" cy="47" rx="5" ry="2.2"
+                         transform="rotate(15 52 47)"/>
+
+                <ellipse cx="50" cy="29" rx="4.5" ry="2"
+                         transform="rotate(-35 50 29)"/>
+
+                <ellipse cx="58" cy="34" rx="4.5" ry="2"
+                         transform="rotate(15 58 34)"/>
+
+                <line x1="50" y1="26" x2="58" y2="12"
+                      stroke-width="1"/>
+
+                <line x1="56" y1="22" x2="67" y2="10"
+                      stroke-width="1"/>
+
+                <line x1="60" y1="31" x2="72" y2="20"
+                      stroke-width="1"/>
             </g>
 
-            <!-- Épi de malt central-droit incliné -->
-            <g stroke="#00682B" stroke-width="1.2" stroke-linecap="round" fill="#00682B" fill-opacity="0.3">
-                <path d="M165 108 Q 182 68 210 28" fill="none" stroke-width="1.4"/>
-                <ellipse cx="173" cy="86" rx="4.8" ry="2" transform="rotate(-30 173 86)"/>
-                <ellipse cx="182" cy="91" rx="4.8" ry="2" transform="rotate(20 182 91)"/>
-                <ellipse cx="181" cy="72" rx="4.8" ry="2" transform="rotate(-30 181 72)"/>
-                <ellipse cx="190" cy="77" rx="4.8" ry="2" transform="rotate(20 190 77)"/>
-                <ellipse cx="189" cy="58" rx="4.8" ry="2" transform="rotate(-30 189 58)"/>
-                <ellipse cx="198" cy="63" rx="4.8" ry="2" transform="rotate(20 198 63)"/>
-                <ellipse cx="198" cy="44" rx="4.5" ry="2" transform="rotate(-30 198 44)"/>
-                <ellipse cx="206" cy="49" rx="4.5" ry="2" transform="rotate(20 206 49)"/>
-                <line x1="205" y1="34" x2="217" y2="18" stroke-width="1"/>
-                <line x1="210" y1="28" x2="224" y2="16" stroke-width="1"/>
+            <!-- ÉPI DE MALT CENTRAL DROIT -->
+
+            <g stroke="#00682B"
+               stroke-width="1.2"
+               stroke-linecap="round"
+               fill="#00682B"
+               fill-opacity="0.50">
+
+                <path d="M165 108 Q 182 68 210 28"
+                      fill="none"
+                      stroke-width="1.4"/>
+
+                <ellipse cx="173" cy="86" rx="4.8" ry="2"
+                         transform="rotate(-30 173 86)"/>
+
+                <ellipse cx="182" cy="91" rx="4.8" ry="2"
+                         transform="rotate(20 182 91)"/>
+
+                <ellipse cx="181" cy="72" rx="4.8" ry="2"
+                         transform="rotate(-30 181 72)"/>
+
+                <ellipse cx="190" cy="77" rx="4.8" ry="2"
+                         transform="rotate(20 190 77)"/>
+
+                <ellipse cx="189" cy="58" rx="4.8" ry="2"
+                         transform="rotate(-30 189 58)"/>
+
+                <ellipse cx="198" cy="63" rx="4.8" ry="2"
+                         transform="rotate(20 198 63)"/>
+
+                <ellipse cx="198" cy="44" rx="4.5" ry="2"
+                         transform="rotate(-30 198 44)"/>
+
+                <ellipse cx="206" cy="49" rx="4.5" ry="2"
+                         transform="rotate(20 206 49)"/>
+
+                <line x1="205" y1="34" x2="217" y2="18"
+                      stroke-width="1"/>
+
+                <line x1="210" y1="28" x2="224" y2="16"
+                      stroke-width="1"/>
             </g>
 
-            <!-- Grains de malt dispersés -->
-            <g stroke="#00682B" stroke-width="1" fill="#00682B" fill-opacity="0.25">
-                <ellipse cx="115" cy="22" rx="4.5" ry="2.2" transform="rotate(-20 115 22)"/>
-                <ellipse cx="126" cy="27" rx="4" ry="2" transform="rotate(25 126 27)"/>
-                <ellipse cx="105" cy="95" rx="4.5" ry="2.2" transform="rotate(15 105 95)"/>
+            <!-- GRAINS DE MALT -->
+
+            <g stroke="#00682B"
+               stroke-width="1"
+               fill="#00682B"
+               fill-opacity="0.45">
+
+                <ellipse cx="115" cy="22" rx="4.5" ry="2.2"
+                         transform="rotate(-20 115 22)"/>
+
+                <ellipse cx="126" cy="27" rx="4" ry="2"
+                         transform="rotate(25 126 27)"/>
+
+                <ellipse cx="105" cy="95" rx="4.5" ry="2.2"
+                         transform="rotate(15 105 95)"/>
             </g>
 
-            <!-- Silhouette de bouteille 1 (droite) -->
-            <g stroke="#00682B" stroke-width="1.5" fill="#00682B" fill-opacity="0.18">
-                <path d="M266 16 H274 V20 H272 V34 C272 41 281 45 281 55 V98 C281 101 279 103 276 103 H264 C261 103 259 101 259 98 V55 C259 45 268 41 268 34 V20 H266 Z"/>
-                <ellipse cx="270" cy="74" rx="7.5" ry="10" fill="#FFFFFF" fill-opacity="0.6" stroke="#00682B" stroke-width="1.1"/>
+            <!-- BOUTEILLE 1 -->
+
+            <g stroke="#00682B"
+               stroke-width="1.5"
+               fill="#00682B"
+               fill-opacity="0.35">
+
+                <path d="
+                    M266 16
+                    H274 V20
+                    H272 V34
+                    C272 41 281 45 281 55
+                    V98
+                    C281 101 279 103 276 103
+                    H264
+                    C261 103 259 101 259 98
+                    V55
+                    C259 45 268 41 268 34
+                    V20 H266 Z
+                "/>
+
+                <ellipse cx="270" cy="74"
+                         rx="7.5" ry="10"
+                         fill="#FFFFFF"
+                         fill-opacity="0.6"
+                         stroke="#00682B"
+                         stroke-width="1.1"/>
             </g>
 
-            <!-- Silhouette de bouteille 2 (légèrement inclinée à côté) -->
-            <g transform="rotate(-10 242 68)" stroke="#00682B" stroke-width="1.3" fill="#00682B" fill-opacity="0.14">
-                <path d="M239 26 H245 V29 H244 V41 C244 47 251 50 251 58 V94 C251 96 249 98 247 98 H237 C235 98 233 96 233 94 V58 C233 50 240 47 240 41 V29 H239 Z"/>
+            <!-- BOUTEILLE 2 -->
+
+            <g transform="rotate(-10 242 68)"
+               stroke="#00682B"
+               stroke-width="1.3"
+               fill="#00682B"
+               fill-opacity="0.30">
+
+                <path d="
+                    M239 26 H245 V29
+                    H244 V41
+                    C244 47 251 50 251 58
+                    V94
+                    C251 96 249 98 247 98
+                    H237
+                    C235 98 233 96 233 94
+                    V58
+                    C233 50 240 47 240 41
+                    V29 H239 Z
+                "/>
             </g>
+
         </svg>
 
+        <!-- CONTENU DE L'ÉTIQUETTE -->
+
         <div class="inner-frame">
+
             <div class="score-header">
-                <svg class="star-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <polygon points="12,1.8 15.1,8.2 22.2,9.2 17.1,14.2 18.3,21.2 12,17.9 5.7,21.2 6.9,14.2 1.8,9.2 8.9,8.2" fill="#E30613"/>
+
+                <svg class="star-icon"
+                     viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+
+                    <polygon
+                        points="12,1.8 15.1,8.2 22.2,9.2 17.1,14.2 18.3,21.2 12,17.9 5.7,21.2 6.9,14.2 1.8,9.2 8.9,8.2"
+                        fill="#E30613"
+                    />
+
                 </svg>
+
                 <span class="score-title-text">Score :</span>
+
             </div>
 
             <div class="score-list">
+
                 <div class="score-row">
                     <span class="score-num">0 -</span>
                     <span>Incorrect / Pas clair</span>
                 </div>
+
                 <div class="score-row">
                     <span class="score-num">1 -</span>
                     <span>Partiellement correct / peut partiellement expliquer</span>
                 </div>
+
                 <div class="score-row">
                     <span class="score-num">2 -</span>
                     <span>Correct / c'est clair</span>
                 </div>
+
                 <div class="score-row">
                     <span class="score-num">3 -</span>
                     <span>Parfait (exemple pour tous)</span>
                 </div>
+
             </div>
+
         </div>
+
     </div>
 
-    <!-- Téléchargement PNG -->
+    <!-- TÉLÉCHARGEMENT ET APERÇU -->
+
     <div class="controls">
-        <button class="btn-download" onclick="downloadPNG()">Télécharger le PNG (8 × 3 cm)</button>
+
+        <button
+            class="btn-download"
+            id="download-button"
+            onclick="downloadPNG()"
+        >
+            Télécharger le PNG (8 × 3 cm)
+        </button>
+
         <div class="preview-zone" id="output-container"></div>
+
     </div>
 
     <script>
-        function generatePNG(autoDownload = false) {
+
+        async function generatePNG(autoDownload = false) {
+
             const card = document.getElementById('score-card');
-            html2canvas(card, {
-                scale: 4,
-                backgroundColor: null
-            }).then(canvas => {
+            const button = document.getElementById('download-button');
+            const container = document.getElementById('output-container');
+
+            try {
+
+                button.disabled = true;
+                button.textContent = "Génération en cours...";
+
+                await document.fonts.ready;
+
+                const canvas = await html2canvas(card, {
+
+                    scale: 4,
+
+                    backgroundColor: '#FFFFFF',
+
+                    useCORS: true,
+
+                    allowTaint: false,
+
+                    logging: false,
+
+                    imageTimeout: 15000,
+
+                    width: card.offsetWidth,
+
+                    height: card.offsetHeight,
+
+                    onclone: function(clonedDocument) {
+
+                        const clonedCard =
+                            clonedDocument.getElementById('score-card');
+
+                        const watermark =
+                            clonedCard.querySelector('.bg-watermark');
+
+                        if (watermark) {
+                            watermark.style.display = 'block';
+                            watermark.style.opacity = '0.20';
+                            watermark.style.visibility = 'visible';
+                            watermark.style.zIndex = '0';
+                        }
+
+                    }
+
+                });
+
                 const dataUrl = canvas.toDataURL('image/png');
-                const container = document.getElementById('output-container');
-                container.innerHTML = `<p>Image PNG prête (clic droit &rarr; <i>Enregistrer l'image sous...</i>) :</p><img src="${dataUrl}" alt="Score 8x3cm PNG">`;
+
+                container.innerHTML = `
+                    <p>
+                        Image PNG prête
+                        (clic droit → Enregistrer l'image sous...)
+                    </p>
+                    <img
+                        src="${dataUrl}"
+                        alt="Score 8x3cm PNG"
+                    >
+                `;
 
                 if (autoDownload) {
+
                     const link = document.createElement('a');
+
                     link.download = 'score-8x3cm.png';
+
                     link.href = dataUrl;
+
+                    document.body.appendChild(link);
+
                     link.click();
+
+                    link.remove();
+
                 }
-            });
+
+            } catch (error) {
+
+                console.error("Erreur PNG :", error);
+
+                alert(
+                    "Une erreur est survenue pendant la génération du PNG."
+                );
+
+            } finally {
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Télécharger le PNG (8 × 3 cm)";
+
+            }
+
         }
 
         function downloadPNG() {
             generatePNG(true);
         }
 
-        window.onload = () => generatePNG(false);
+        window.addEventListener('load', function() {
+            generatePNG(false);
+        });
+
     </script>
 
 </body>
